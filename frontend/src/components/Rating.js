@@ -1,7 +1,3 @@
-import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-
 function Rating(props) {
   const { rating, numReviews } = props;
   return (
