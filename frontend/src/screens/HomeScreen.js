@@ -5,6 +5,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Product from '../components/Product';
 import { Helmet } from 'react-helmet-async';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import { getError } from '../utils';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,7 +27,6 @@ function HomeScreen() {
     loading: true,
     error: '',
   });
-  //const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -32,14 +34,16 @@ function HomeScreen() {
         const result = await axios.get('/api/products');
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: error.message });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
-
-      //setProducts(result.data);
     };
     fetchData();
   }, []);
-  return (
+  return loading ? (
+    <LoadingBox />
+  ) : error ? (
+    <MessageBox variant="danger">{error}</MessageBox>
+  ) : (
     <div>
       <Helmet>
         <title>MERN Cart</title>
